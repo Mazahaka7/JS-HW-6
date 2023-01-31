@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styles/styles.css" />
+    <title>calculator</title>
+  </head>
+  <body>
+    <div class="calculator">
+      <input type="text" class="calculator__inp" />
+      <div class="calculator__grid">
+        <div class="clear">A/C</div>
+        <div class="toggleSign">+/-</div>
+        <div class="percent">%</div>
+        <div class="sign">/</div>
+        <div class="number">7</div>
+        <div class="number">8</div>
+        <div class="number">9</div>
+        <div class="sign">*</div>
+        <div class="number">4</div>
+        <div class="number">5</div>
+        <div class="number">6</div>
+        <div class="sign">-</div>
+        <div class="number">1</div>
+        <div class="number">2</div>
+        <div class="number">3</div>
+        <div class="sign">+</div>
+        <div class="number">0</div>
+        <div class="number">.</div>
+        <div class="result">=</div>
+      </div>
+    </div>
+    <script>
+      var number = document.querySelectorAll(".number");
+      var inp = document.querySelector(".calculator__inp");
+      var sign = document.querySelectorAll(".sign");
+      var result = document.querySelector(".result");
+      var clear = document.querySelector(".clear");
+      var percent = document.querySelector(".percent");
+      var toggleSign = document.querySelector(".toggleSign");
+
+      for (i = 0; i < number.length; i++) {
+        number[i].addEventListener("click", insertValue);
+      }
+
+      for (i = 0; i < sign.length; i++) {
+        sign[i].addEventListener("click", insertSign);
+      }
+
+      function insertValue() {
+        inp.value += this.innerText;
+      }
+
+      //Check f-n check signs in calculator input
+      var signArray = [...sign].map((el) => el.textContent); //масив з знаками
+      function checkSignInAnInput() {
+        if (inp.value.length >= 2) {
+          //перевіряємо на два і більше введених знаків
+          var arrayFromValue = inp.value.split(); //перетворюємо на масив строку
+          for (i = 0; i < arrayFromValue.length; i++) {
+            if (
+              signArray.includes(arrayFromValue[i]) &&
+              signArray.includes(arrayFromValue[i + 1])
+            ) {
+              return true;
+            }
+          }
+        }
+        return false;
+      }
+      var isTwoSignsInARow = checkSignInAnInput();
+      //Sign input f-n
+      function insertSign() {
+        //Insert & check f-n (a sign at the start or 2 signs in a row)
+        var isStartFromSign =
+          signArray.includes(inp.value[0]) &&
+          signArray.includes(inp.value[0 + 1]);
+        if (isStartFromSign) {
+          alert("enter a number first");
+        } else if (isTwoSignsInARow) {
+          inp.value.substring(0, [inp.length - 1]) + this.innerText;
+        } else {
+          inp.value += this.innerText;
+        }
+      }
+
+      //buttons AC
+      clear.addEventListener("click", clearAll);
+      function clearAll() {
+        inp.value = "";
+      }
+      //function that get %
+      percent.addEventListener("click", getPercents);
+      function getPercents() {
+        inp.value /= 100;
+      }
+      //chage to negative sign
+      toggleSign.addEventListener("click", getNegativeSign);
+      function getNegativeSign() {
+        if (inp.value != "") {
+          inp.value = inp.value * -1;
+        }
+      }
+
+      //result
+      result.addEventListener("click", getResult);
+      function getResult() {
+        inp.value = eval(inp.value);
+      }
+
+      document.body.addEventListener("keydown", function (e) {
+        if (e.keyCode == 13) {
+          getResult();
+        }
+      });
+    </script>
+  </body>
+</html>
