@@ -48,38 +48,15 @@
       for (i = 0; i < sign.length; i++) {
         sign[i].addEventListener("click", insertSign);
       }
-
+      //Value input f-n
       function insertValue() {
         inp.value += this.innerText;
       }
-
-      //Check f-n check signs in calculator input
-      var signArray = [...sign].map((el) => el.textContent); //масив з знаками
-      function checkSignInAnInput() {
-        if (inp.value.length >= 2) {
-          //перевіряємо на два і більше введених знаків
-          var arrayFromValue = inp.value.split(); //перетворюємо на масив строку
-          for (i = 0; i < arrayFromValue.length; i++) {
-            if (
-              signArray.includes(arrayFromValue[i]) &&
-              signArray.includes(arrayFromValue[i + 1])
-            ) {
-              return true;
-            }
-          }
-        }
-        return false;
-      }
-      var isTwoSignsInARow = checkSignInAnInput();
       //Sign input f-n
+      var signArray = [...sign].map((el) => el.textContent); //масив з знаками
       function insertSign() {
-        //Insert & check f-n (a sign at the start or 2 signs in a row)
-        var isStartFromSign =
-          signArray.includes(inp.value[0]) &&
-          signArray.includes(inp.value[0 + 1]);
-        if (isStartFromSign) {
-          alert("enter a number first");
-        } else if (isTwoSignsInARow) {
+        var onlySignsFromInput = isNaN(inp.value[inp.value.length - 1]);
+        if (onlySignsFromInput) {
           inp.value.substring(0, [inp.length - 1]) + this.innerText;
         } else {
           inp.value += this.innerText;
@@ -94,7 +71,7 @@
       //function that get %
       percent.addEventListener("click", getPercents);
       function getPercents() {
-        inp.value /= 100;
+        inp.value = eval(inp.value) * 0.01;
       }
       //chage to negative sign
       toggleSign.addEventListener("click", getNegativeSign);
